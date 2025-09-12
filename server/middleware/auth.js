@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import logger from "../utils/logger.js"
 //Middleware for routes protection
 
 export const protectRoute = async (req, res, next) => {
@@ -13,7 +14,7 @@ export const protectRoute = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error.message);
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl });
     res.json({success: false, message: error.message});
   }
 }

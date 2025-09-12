@@ -2,7 +2,7 @@ import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import cloudniary from "../lib/cloudinary.js"
-
+import logger from "../utils/logger.js"
 //Sign up user
 export const signup = async (req, res) =>{
   const {fullName, email, password, bio} = req.body;
@@ -30,7 +30,7 @@ export const signup = async (req, res) =>{
 
     res.json({success: true, userData: newUser, token, message: "Account Created Successfully"})
   } catch (error) {
-    console.log(error.message)
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
     res.json({success: false, message: error.message})
   }
   
@@ -54,7 +54,7 @@ export const login = async (req, res) => {
     res.json({success: true, userData, token, message: "Login Successful"})
 
   }catch(error){
-    console.log(error.message)
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
     res.json({success: false, message: error.message})
   }
 }
@@ -83,7 +83,7 @@ export const updateProfile = async (req, res) => {
 
     res.json({success: true, user: updatedUser})
   } catch (error) {
-    console.log(error.message)
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
     res.json({success: false, message: error.message})
   }
   

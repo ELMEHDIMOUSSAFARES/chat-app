@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import Message from "../models/Message.js";
+import logger from "../utils/logger.js"
 //Get all users except the logged in user
 
 export const getUsersForSidebar = async (req, res) => {
@@ -18,7 +19,7 @@ export const getUsersForSidebar = async (req, res) => {
     await Promise.all(promises);
     res.json({success: true, users: filteredUsers, unseenMessages})
   } catch (error) {
-    console.log(error.message)
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
     res.json({success: false, message: error.message})
   }
 }
@@ -42,7 +43,7 @@ export const getMessages = async (req, res) => {
     res.json({success: true, messages})
 
   } catch (error) {
-    console.log(error.message)
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
     res.json({success: false, message: error.message})
   }
 }
@@ -57,8 +58,7 @@ export const markMessageAsSeen = async (req, res) => {
     await Message.findByIdAndUpdate(id, {seen: true})
     res.json({success: true})
   } catch (error) {
-    console.log(error.message)
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
     res.json({success: false, message: error.message})
   }
-  
 }

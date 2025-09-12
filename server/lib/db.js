@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import logger from "../utils/logger.js"
 //Connecting to Mongo DB func
 
 export const connectDB = async () => {
@@ -9,6 +9,6 @@ export const connectDB = async () => {
 
     await mongoose.connect(`${process.env.MONGODB_URI}/chat-app`)
   } catch(error){
-    console.log(error);
+    logger.error(error.message, { stack: error.stack, route: req.originalUrl })
   }
 }
