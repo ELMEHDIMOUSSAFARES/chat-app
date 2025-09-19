@@ -11,10 +11,13 @@ const app = express();
 const server = http.createServer(app);
 
 //Socket.io initialization
-export const io = new Server(server, {
-  cors: {origin: "*"}
-});
+const corsOrigin = process.env.NODE_ENV === "production"
+  ? "https://chat-app-one-fawn-79.vercel.app"  // production frontend URL
+  : "*"; // dev
 
+export const io = new Server(server, {
+  cors: { origin: corsOrigin }
+});
 //Storing online users statuses
 export const userSocketMap = {};
 
@@ -50,11 +53,8 @@ app.use("/api/messages", messageRouter);
 await connectDB();
 
 
-if(process.env.NODE_ENV !== "production"){
-  const PORT = process.env.PORT || 5000;
-  server.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  });
-}
-//Export server to vercel
-export default server;
+
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+});
